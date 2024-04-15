@@ -1,0 +1,16 @@
+
+“	java:S117="QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¡ŠŒ¿8’ã«†î1J$8230e4ac-4bb6-48fb-936c-66edf1b5a410
+]
+java:S1700"Rename field "matrix"(–Û©·úÿÿÿÿ8•ã«†î1J$8cc2da08-33cc-48d1-a2bf-378429777cb9
+…
+java:S2184Ã"BCast one of the operands of this addition operation to a "double".(Ú€õU8–ã«†î1J$131c72e1-f964-4c2f-91df-ebb1eeff971f
+Œ
+java:S3518Æ"CMake sure this expression can't be zero before doing this division.(›Ú¿…úÿÿÿÿ8†å«†î1J$c3e2f6bc-4822-4a54-898d-1c1cb52ef605
+
+java:S1854x"=Remove this useless assignment to local variable "newMatrix".(¦°Ó*8å«†î1J$dd1af96a-c6e5-4684-a8ff-de87fdbda3ea
+–
+java:S3776‰"RRefactor this method to reduce its Cognitive Complexity from 23 to the 15 allowed.(«Øå‡8’å«†î1J$e6cee16d-fd69-4410-895b-162b9bd950d2
+¢
+java:S3012¯"YUse "Arrays.copyOf", "Arrays.asList", "Collections.addAll" or "System.arraycopy" instead.(û³ÈØÿÿÿÿÿ8–å«†î1J$52a609f0-1c68-451b-a6a4-47bbb1bc3481
+¢
+java:S3012"YUse "Arrays.copyOf", "Arrays.asList", "Collections.addAll" or "System.arraycopy" instead.(ã’óÈûÿÿÿÿ8å«†î1J$deefa586-0d46-4f17-9696-08100279b07f
