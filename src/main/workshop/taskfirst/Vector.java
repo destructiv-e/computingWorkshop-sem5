@@ -90,7 +90,92 @@ public class Vector {
     return new Vector(result);
   }
 
-  public void setVector(int i, double elem){
+  /**
+   * Вычисляет бесконечную норму
+   *
+   * @return - значение нормы
+   */
+  public double calcVectorInfNorm() {
+    double max = 0;
+    for (int i = 0; i < vectorArr.length; i++) {
+      if (Math.abs(vectorArr[i]) > Math.abs(max)) {
+        max = Math.abs(vectorArr[i]);
+      }
+    }
+    return max;
+  }
+
+  /**
+   * Вычисляет вторую норму вектора
+   *
+   * @return - значение нормы
+   */
+  public double calcVectorTwoNorm() {
+    double sum = 0;
+    for (int i = 0; i < vectorArr.length; i++) {
+      sum = sum + Math.pow(vectorArr[i], 2);
+    }
+    return Math.pow(sum, 0.5);
+  }
+
+
+  /**
+   * Суммирует два вектора
+   *
+   * @param vector - вектор, который хотим прибавить
+   * @return - вектор
+   */
+  public Vector vecSum(Vector vector) {
+    Vector res = new Vector(this.size);
+    for (int i = 0; i < this.vectorArr.length; i++) {
+      res.getVectorArr()[i] = this.vectorArr[i] + vector.getVectorArr()[i];
+    }
+    return res;
+  }
+
+  /**
+   * Умножает вектор на число
+   *
+   * @param a - число на которое хотим умножить
+   * @return - вектор
+   */
+  public Vector vecMultiplicationByNumber(double a) {
+    Vector res = new Vector(this.size);
+    for (int i = 0; i < this.vectorArr.length; i++) {
+      res.getVectorArr()[i] = this.vectorArr[i] * a;
+    }
+    return res;
+  }
+
+  /**
+   * Умножение двух векторов
+   *
+   * @param vector -
+   * @return - вектор
+   */
+  public Vector vecMultiplicationByVector(Vector vector) {
+    Vector res = new Vector(this.size);
+    for (int i = 0; i < this.vectorArr.length; i++) {
+      res.getVectorArr()[i] = this.vectorArr[i] * vector.getVectorArr()[i];
+    }
+    return res;
+  }
+
+  /**
+   * Деление вектора на число
+   *
+   * @param a -
+   * @return -
+   */
+  public Vector vecDivisionByNumber(double a) {
+    Vector res = new Vector(this.size);
+    for (int i = 0; i < this.vectorArr.length; i++) {
+      res.getVectorArr()[i] = this.vectorArr[i] / a;
+    }
+    return res;
+  }
+
+  public void setVector(int i, double elem) {
     this.vectorArr[i] = elem;
   }
 
