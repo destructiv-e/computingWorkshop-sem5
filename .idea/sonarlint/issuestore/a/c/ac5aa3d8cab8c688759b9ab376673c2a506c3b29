@@ -1,0 +1,12 @@
+
+ƒ
+java:S1854
+";Remove this useless assignment to local variable "matrixA".(¼¡†şÿÿÿÿ8È‘üğ1J$9aa008c4-3335-47ec-9b48-fdccc4d10fd1
+t
+java:S1481
+",Remove this unused "matrixA" local variable.(¼¡†şÿÿÿÿ8Í‘üğ1J$a299c8d4-2f19-4a3f-8e72-99c3b5ae235d
+ƒ	java:S125"<This block of commented-out lines of code should be removed.(¹¡”Öşÿÿÿÿ8Ï‘üğ1J$c8edb477-4ddc-4b53-90f2-f0d33b159d42
+s
+java:S1128"0Remove this unused import 'java.util.ArrayList'.(÷‰îƒ8éùğ1J$dce0c3f1-5c7b-4e9c-bef4-aa9d25aa8c7d
+s
+java:S1128"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ8Ü‘üğ1J$1b3a0d05-03fc-48e9-8ce9-b9cafe554026
