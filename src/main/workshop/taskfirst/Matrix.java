@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
+import org.apache.commons.math3.linear.EigenDecomposition;
+import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.linear.MatrixUtils;
 
 /**
  * Класс матриц
@@ -66,6 +69,38 @@ public class Matrix {
       }
     }
     return inverseMatrix;
+  }
+
+  public Matrix getInverseMatrix1() {
+    double[][] inverseMatrixArr = new double[matrix.length][matrix.length];
+    Matrix inverseMatrix = new Matrix(inverseMatrixArr);
+    Vector vectorRes;
+    List<Vector> unitVectors = Vector.getListUnitVector(matrix.length);
+    for (int i = 0; i < matrix.length; i++) {
+      Vector vector_i = unitVectors.get(i);
+      vectorRes = new SolvingLinearSystems(new Matrix(matrix), vector_i,
+          1.E-3).solutionGaussElemSelec(new Matrix(matrix),
+          vector_i);
+      for (int j = 0; j < rows; j++) {
+        inverseMatrix.set(vectorRes.getVectorArr()[j], i, j);
+      }
+    }
+    return inverseMatrix.transpose();
+  }
+
+  /**
+   * Метод для транспонирования матрицы
+   *
+   * @return транспонированная матрица
+   */
+  public Matrix transpose() {
+    double[][] transposedMatrix = new double[columns][rows];
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < columns; j++) {
+        transposedMatrix[j][i] = matrix[i][j];
+      }
+    }
+    return new Matrix(transposedMatrix);
   }
 
   /**
@@ -131,6 +166,7 @@ public class Matrix {
 
   /**
    * Метод, который приводит матрицу к единично - диагональной (не нужен)
+   *
    * @param matrix - матрица
    * @return - матрица
    */
@@ -226,7 +262,7 @@ public class Matrix {
   }
 
   /**
-   * Метод, который вычисляет норму матрицы
+   * Метод, который вычисляет бесконечную норму матрицы
    *
    * @param matrix - матрица
    * @return - норма матрицы
@@ -263,8 +299,8 @@ public class Matrix {
    * @param matrix - расширенную матрциу
    * @return - матриц А и матрица В
    */
-  public List<Matrix> splitMatrix(Matrix matrix){
-    double[][] firstMatrixArr = new double[matrix.rows][matrix.columns-1];
+  public List<Matrix> splitMatrix(Matrix matrix) {
+    double[][] firstMatrixArr = new double[matrix.rows][matrix.columns - 1];
     double[][] secondMatrixArr = new double[matrix.rows][1];
     for (int i = 0; i < matrix.rows; i++) {
       for (int j = 0; j < matrix.columns - 1; j++) {
@@ -298,14 +334,15 @@ public class Matrix {
   }
 
   /**
-   * Умножает матрицу на вектор.
+   * Умножает матрицу справа на вектор.
    *
    * @param vector - вектор, на который умножается матрица
    * @return Результат умножения в виде вектора
    */
   public Vector multiplyByVector(Vector vector) {
     if (columns != vector.getSize()) {
-      throw new IllegalArgumentException("Количество столбцов матрицы должно быть равно размеру вектора");
+      throw new IllegalArgumentException(
+          "Количество столбцов матрицы должно быть равно размеру вектора");
     }
 
     double[] result = new double[rows];
@@ -327,7 +364,8 @@ public class Matrix {
    */
   public Matrix multiply(Matrix other) {
     if (this.columns != other.rows) {
-      throw new IllegalArgumentException("Количество столбцов первой матрицы должно быть равно количеству строк второй матрицы");
+      throw new IllegalArgumentException(
+          "Количество столбцов первой матрицы должно быть равно количеству строк второй матрицы");
     }
 
     double[][] result = new double[this.rows][other.columns];
@@ -342,6 +380,104 @@ public class Matrix {
 
     return new Matrix(result);
   }
+
+  /**
+   * Метод, который вычисляет спектральный радиус квадратной матрицы
+   *
+   * @return - максимальное абсолютное значение собственных значений матрицы.
+   */
+  public double spectralRadius() {
+    RealMatrix realMatrix = MatrixUtils.createRealMatrix(this.matrix);
+    EigenDecomposition eigenDecomposition = new EigenDecomposition(realMatrix);
+    double[] realEigenvalues = eigenDecomposition.getRealEigenvalues();
+    double maxEigenvalue = Arrays.stream(realEigenvalues).map(Math::abs).max().orElse(0.0);
+    long count = Arrays.stream(realEigenvalues).map(Math::abs).filter(val -> val == maxEigenvalue)
+        .count();
+    if (count > 1) {
+      System.out.println("Максимальное по модулю собственное число матрицы не единственно.");
+    } else {
+      System.out.println(
+          "Максимально по модулю собственное число матрицы единственно. Значит, можно применить метод Люстерника.");
+    }
+    return maxEigenvalue;
+  }
+
+  /**
+   * Метод, который вычисляет спектральный радиус квадратной матрицы
+   *
+   * @return - true or false.
+   */
+  public double spectralRadiusSeid() {
+    RealMatrix realMatrix = MatrixUtils.createRealMatrix(this.matrix);
+    EigenDecomposition eigenDecomposition = new EigenDecomposition(realMatrix);
+    double[] realEigenvalues = eigenDecomposition.getRealEigenvalues();
+
+    return Arrays.stream(realEigenvalues).map(Math::abs).max().orElse(0.0);
+  }
+
+  /**
+   * Делит матрицу на верхне-треугольную и нижне-треугольную по главной диагонали. Главная диагональ
+   * достаётся верхней части
+   *
+   * @return верхне и нижне диагональные матрицы
+   */
+  public List<Matrix> divideToLeftRight() {
+    double[][] hLeft = new double[rows][rows];
+    double[][] hRight = new double[rows][rows];
+    List<Matrix> listTwoMatrix = new ArrayList<>(2);
+
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < rows; j++) {
+        if (i < j) {
+          hLeft[i][j] = this.matrix[i][j];
+          hRight[i][j] = 0;
+        } else {
+          hLeft[i][j] = 0;
+          hRight[i][j] = this.matrix[i][j];
+        }
+      }
+    }
+    listTwoMatrix.add(new Matrix(hLeft));
+    listTwoMatrix.add(new Matrix(hRight));
+    return listTwoMatrix;
+  }
+
+  /**
+   * Вычисляет разность между данной матрицей и матрицей matrix.
+   *
+   * @param matrix матрица для вычитания
+   * @return разность матриц
+   */
+  public Matrix diff(Matrix matrix) {
+    double[][] sumMatrix = new double[rows][columns];
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < columns; j++) {
+        sumMatrix[i][j] = this.matrix[i][j] - matrix.getElemMatrix(i, j);
+      }
+    }
+    return new Matrix(sumMatrix);
+  }
+
+  /**
+   * Создаёт единичную матрицу.
+   *
+   * @param size размер
+   * @return единичная матрица
+   */
+  public static Matrix makeUnitMatrix(int size) {
+    double[][] result = new double[size][size];
+    for (int i = 0; i < size; i++) {
+      for (int j = 0; j < size; j++) {
+        if (i == j) {
+          result[i][j] = 1;
+        } else {
+          result[i][j] = 0;
+        }
+      }
+    }
+    return new Matrix(result);
+  }
+
 
   public void set(double elem, int i, int j) {
     matrix[i][j] = elem;

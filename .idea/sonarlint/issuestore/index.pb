@@ -9,7 +9,13 @@ W
 'src/main/workshop/taskfirst/Matrix.java,5\3\53d44571bbe086a52ec481401f83dc732ec06d2f
 W
 'src/main/workshop/taskfirst/Vector.java,b\6\b69a71946591c0c8a5bec40ad2917b3166483c1e
-c
-3src/main/workshop/taskfirst/ListForTwoElements.java,e\f\ef6ff66d15c70f0bb84c13765b82beda8bc25818
-F
-src/test/java/Tst.java,1\6\16e751e6a46251c7f2f92637ca2640f3462953b6
+T
+$.idea/checkstyleidea-libs/readme.txt,0\7\07b7bfcbe4a27e2783b05ea0caae034a6bc036ec
+o
+?src/main/workshop/tasksecond/IterativeSolvingLinearSystems.java,3\9\39af7d8ef230cea04cd58bb60b8f5ed6ba2a5903
+`
+0src/main/workshop/tasksecond/MainSecondTask.java,7\c\7ccd7f7a814d85fe74feefa9997751003dfa546e
+h
+8src/main/workshop/tasksecond/IterationMethodsResult.java,d\e\de18f2cc28fc1e6c0ffe2e9d93281fd44f44db7d
+^
+.src/main/workshop/taskthird/MainThirdTask.java,a\c\ac5aa3d8cab8c688759b9ab376673c2a506c3b29
