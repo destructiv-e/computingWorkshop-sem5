@@ -175,6 +175,21 @@ public class Vector {
     return res;
   }
 
+  public double multiplyScalar(Vector prev) {
+    double sum = 0;
+    for (int i = 0; i < size; i++) {
+      sum += vectorArr[i] * prev.get(i);
+    }
+    return sum;
+  }
+
+  public void normalize(){
+    double norm = this.calcVectorTwoNorm();
+    for (int i = 0; i < size; i++) {
+      vectorArr[i] = vectorArr[i] / norm;
+    }
+  }
+
   public void setVector(int i, double elem) {
     this.vectorArr[i] = elem;
   }

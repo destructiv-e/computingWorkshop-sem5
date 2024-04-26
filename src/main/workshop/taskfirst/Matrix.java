@@ -7,6 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import org.apache.commons.math3.linear.EigenDecomposition;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.MatrixUtils;
+import taskthird.CalculationEigenValuesAndVectorsMatrix;
+import taskthird.MethodJacobiResult;
+import taskthird.PowerAndScalarMethodResult;
 
 /**
  * Класс матриц
@@ -478,6 +481,105 @@ public class Matrix {
     return new Matrix(result);
   }
 
+  /**
+   * Поиск индексов элемента матрицы, который имеет максимальное по модулю значение среди всех
+   * элементов матрицы, находящихся выше главной диагонали.
+   *
+   * @param matrix - матрица
+   * @return - индексы
+   */
+  public List<Integer> findIkJk(double[][] matrix) {
+    if (matrix == null || matrix.length == 0) {
+      throw new IllegalArgumentException("Matrix cannot be null or empty");
+    }
+    int iMax = -1;
+    int jMax = -1;
+    double maxElem = -1;
+    double tmp;
+    int size = matrix.length;
+    List<Integer> res = Arrays.asList(-1, -1);
+    for (int i = 0; i < size; i++) {
+      for (int j = i + 1; j < size; j++) {
+        tmp = Math.abs(matrix[i][j]);
+        if (tmp > maxElem) {
+          maxElem = tmp;
+          iMax = i;
+          jMax = j;
+          res.set(0, iMax);
+          res.set(1, jMax);
+        }
+      }
+    }
+    return res;
+  }
+
+  /**
+   * Получить столбец матрицы.
+   *
+   * @param column индекс столбца
+   * @return столбец матрицы
+   */
+  public Vector getColumn(int column) {
+    double[] vector = new double[rows];
+    for (int i = 0; i < rows; i++) {
+      vector[i] = matrix[i][column];
+    }
+    return new Vector(vector);
+  }
+
+  public void setColumn(int column, Vector eigenVector) {
+    for (int i = 0; i < rows; i++) {
+      matrix[i][column] = eigenVector.get(i);
+    }
+  }
+
+  /**
+   * Умножает двумерный массив на скаляр.
+   *
+   * @param scalar скаляр
+   * @return произведение двумерного массива на скаляр
+   */
+  public Matrix mul(double scalar) {
+    int rows = matrix.length;
+    int columns = matrix[0].length;
+    double[][] result = new double[rows][columns];
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < columns; j++) {
+        result[i][j] = scalar * matrix[i][j];
+      }
+    }
+    return new Matrix(result);
+  }
+
+  /**
+   * Метод скалярный произведений
+   *
+   * @param epsilon - точность
+   * @return - собственное число и вектор
+   */
+  public PowerAndScalarMethodResult scalarProductMethod1(double epsilon){
+    Matrix matrixA = new Matrix(matrix);
+    int k = 0;
+    double maxEigenValue = 0;
+    CalculationEigenValuesAndVectorsMatrix new1 = new CalculationEigenValuesAndVectorsMatrix(matrixA);
+    MethodJacobiResult valVec = new1.methodJacobi(1.e-6);
+    Matrix eigenVectors = valVec.eigenvectorMatrix();
+    Vector prev;
+    Vector vectorMaxEigenValue = Vector.getZeroVector(matrix.length);
+    for (int i = 0; i < matrix.length; i++) {
+      vectorMaxEigenValue = vectorMaxEigenValue.vecSum(eigenVectors.getColumn(i));
+    }
+
+    do{
+      k++;
+      prev = vectorMaxEigenValue;
+      vectorMaxEigenValue = matrixA.multiplyByVector(vectorMaxEigenValue);
+      maxEigenValue = vectorMaxEigenValue.multiplyScalar(prev) / prev.multiplyScalar(prev);
+    } while (new1.posterioriForEigen(maxEigenValue, vectorMaxEigenValue) >= epsilon);
+    vectorMaxEigenValue.normalize();
+
+    return new PowerAndScalarMethodResult(maxEigenValue, vectorMaxEigenValue, k);
+  }
 
   public void set(double elem, int i, int j) {
     matrix[i][j] = elem;
